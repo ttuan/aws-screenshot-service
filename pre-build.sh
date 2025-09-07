@@ -6,7 +6,11 @@ echo "Please Input Region:"
 read region
 
 # Create S3 bucket storage tfstate file
-aws s3api create-bucket --bucket $project-$env-iac-state --region $region --create-bucket-configuration LocationConstraint=$region --profile $project-$env
+if [ "$region" = "us-east-1" ]; then
+    aws s3api create-bucket --bucket $project-$env-iac-state --region $region --profile $project-$env
+else
+    aws s3api create-bucket --bucket $project-$env-iac-state --region $region --create-bucket-configuration LocationConstraint=$region --profile $project-$env
+fi
 aws s3api put-bucket-versioning --bucket $project-$env-iac-state --versioning-configuration Status=Enabled --region $region --profile $project-$env
 aws s3api put-public-access-block \
     --bucket $project-$env-iac-state \
