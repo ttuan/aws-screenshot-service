@@ -1,0 +1,52 @@
+# Terraform files
+*.tfstate
+*.tfstate.*
+*.tfvars.backup
+.terraform/
+
+# Terraform plan files
+*.tfplan
+tfplan*
+
+# Variable symlinks (created by Makefile)
+terraform/envs/*/[0-9]*/_variables.tf
+
+# AWS credentials and sensitive files
+*.pem
+*.key
+.aws/
+aws-credentials.json
+
+# Environment-specific secrets
+terraform.*.tfvars.secret
+secrets.tf
+secrets.auto.tfvars
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+terraform.log
+
+# Backup files
+*.bak
+*.backup
+
+# Temporary files
+*.tmp
+tmp/
+temp/
