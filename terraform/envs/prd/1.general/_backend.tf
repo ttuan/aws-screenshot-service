@@ -7,18 +7,17 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 4.0"
+      version = ">= 5.0"
     }
-    template = "~> 2.0"
   }
   backend "s3" {
-    profile = "project-prod"
-    bucket  = "project-prod-iac-state"
-    key     = "general/terraform.prod.tfstate"
-    region  = "ap-northeast-1"
-    /* encrypt        = true
-    kms_key_id     = "arn:aws:kms:ap-northeast-1:<account-id>:key/<key-id>" */
-    dynamodb_table = "project-prod-terraform-state-lock"
+    profile = "screenshot-service-prd"
+    bucket  = "screenshot-service-prd-iac-state"
+    key     = "1.general/terraform.prd.tfstate"
+    region  = "us-east-1"
+    encrypt        = true
+    kms_key_id     = "arn:aws:kms:us-east-1:534929761277:key/db485ffd-7bf1-43b2-9421-ebff58e40734"
+    dynamodb_table = "screenshot-service-prd-terraform-state-lock"
   }
 }
 
