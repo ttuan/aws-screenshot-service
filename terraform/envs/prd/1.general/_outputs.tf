@@ -14,3 +14,14 @@ output "vpc_id" {
   value       = module.vpc.vpc_id
   description = "ID of VPC"
 }
+
+# S3 Bucket outputs
+output "screenshots_bucket_name" {
+  value       = aws_s3_bucket.screenshots.bucket
+  description = "Name of the screenshots S3 bucket"
+}
+
+output "screenshots_bucket_arn" {
+  value       = aws_s3_bucket.screenshots.arn
+  description = "ARN of the screenshots S3 bucket"
+}
