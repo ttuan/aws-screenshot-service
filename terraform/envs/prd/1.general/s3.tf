@@ -44,6 +44,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "screenshots" {
     id     = "screenshots_lifecycle"
     status = "Enabled"
 
+    filter {}
+
     expiration {
       days = 30
     }
