@@ -68,3 +68,59 @@ resource "aws_iam_role_policy" "lambda_screenshot_validator_policy" {
   role   = aws_iam_role.lambda_screenshot_validator.id
   policy = data.aws_iam_policy_document.lambda_sqs_policy.json
 }
+
+###################
+# S3 and DynamoDB Access Policy for Status Checker Lambda
+###################
+data "aws_iam_policy_document" "lambda_status_checker_policy" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "dynamodb:GetItem"
+    ]
+    resources = [
+      "arn:aws:dynamodb:${var.region}:*:table/${var.project}-${var.env}-jobs"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.project}-${var.env}/screenshots/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "arn:aws:logs:${var.region}:*:*"
+    ]
+  }
+}
+
+###################
+# Lambda IAM Role for Screenshot Status Checker
+###################
+resource "aws_iam_role" "lambda_screenshot_status_checker" {
+  name               = "${var.project}-${var.env}-lambda-status-checker-role"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+
+  tags = {
+    Name    = "${var.project}-${var.env}-lambda-status-checker-role"
+    Service = "lambda"
+  }
+}
+
+resource "aws_iam_role_policy" "lambda_screenshot_status_checker_policy" {
+  name   = "${var.project}-${var.env}-lambda-status-checker-policy"
+  role   = aws_iam_role.lambda_screenshot_status_checker.id
+  policy = data.aws_iam_policy_document.lambda_status_checker_policy.json
+}
