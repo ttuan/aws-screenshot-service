@@ -29,6 +29,17 @@ data "aws_iam_policy_document" "lambda_sqs_policy" {
   statement {
     effect = "Allow"
     actions = [
+      "dynamodb:PutItem",
+      "dynamodb:GetItem"
+    ]
+    resources = [
+      "arn:aws:dynamodb:${var.region}:*:table/${var.project}-${var.env}-jobs"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents"

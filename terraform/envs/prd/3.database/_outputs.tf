@@ -8,3 +8,9 @@ output "screenshot_jobs_table_arn" {
   value       = aws_dynamodb_table.screenshot_jobs.arn
   description = "ARN of the screenshot jobs DynamoDB table"
 }
+
+# Alias for Lambda compatibility
+output "dynamodb_table_name" {
+  value       = aws_dynamodb_table.screenshot_jobs.name
+  description = "DynamoDB table name for Lambda environment variables"
+}
