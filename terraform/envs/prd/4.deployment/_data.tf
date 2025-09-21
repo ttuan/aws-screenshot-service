@@ -2,6 +2,9 @@
 # Data Sources
 ###################
 
+# Current AWS region
+data "aws_region" "current" {}
+
 # Reference general infrastructure
 data "terraform_remote_state" "general" {
   backend = "s3"
