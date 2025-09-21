@@ -25,3 +25,9 @@ output "screenshots_bucket_arn" {
   value       = aws_s3_bucket.screenshots.arn
   description = "ARN of the screenshots S3 bucket"
 }
+
+# IAM Role outputs for Lambda
+output "lambda_screenshot_validator_role_arn" {
+  value       = aws_iam_role.lambda_screenshot_validator.arn
+  description = "ARN of the Lambda screenshot validator IAM role"
+}

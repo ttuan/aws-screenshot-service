@@ -11,3 +11,9 @@ output "screenshot_processing_queue_arn" {
   description = "ARN of the screenshot processing SQS queue"
   value       = aws_sqs_queue.screenshot_processing.arn
 }
+
+# Alias for Lambda compatibility
+output "sqs_queue_url" {
+  description = "SQS queue URL for Lambda environment variables"
+  value       = aws_sqs_queue.screenshot_processing.url
+}
