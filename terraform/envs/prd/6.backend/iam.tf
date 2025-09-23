@@ -183,3 +183,9 @@ resource "aws_iam_role_policy_attachment" "ecs_task_dynamodb_policy" {
   policy_arn = aws_iam_policy.ecs_dynamodb_policy.arn
 }
 
+# Minimal policy for ECS Execute Command
+resource "aws_iam_role_policy_attachment" "ecs_task_ssm_policy" {
+  role       = aws_iam_role.ecs_task.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+

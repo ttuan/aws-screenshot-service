@@ -31,3 +31,8 @@ output "lambda_screenshot_validator_role_arn" {
   value       = aws_iam_role.lambda_screenshot_validator.arn
   description = "ARN of the Lambda screenshot validator IAM role"
 }
+
+output "lambda_screenshot_status_checker_role_arn" {
+  value       = aws_iam_role.lambda_screenshot_status_checker.arn
+  description = "ARN of the Lambda screenshot status checker IAM role"
+}
