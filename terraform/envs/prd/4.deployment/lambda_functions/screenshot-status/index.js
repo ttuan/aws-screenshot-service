@@ -18,7 +18,8 @@ exports.handler = async (event) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+          "Access-Control-Allow-Headers":
+            "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
           "Access-Control-Allow-Methods": "GET,OPTIONS",
         },
         body: JSON.stringify({
@@ -32,8 +33,8 @@ exports.handler = async (event) => {
     const getItemCommand = new GetItemCommand({
       TableName: process.env.DYNAMODB_TABLE_NAME,
       Key: {
-        jobId: { S: jobId }
-      }
+        jobId: { S: jobId },
+      },
     });
 
     const dynamoResponse = await dynamoClient.send(getItemCommand);
@@ -44,7 +45,8 @@ exports.handler = async (event) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+          "Access-Control-Allow-Headers":
+            "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
           "Access-Control-Allow-Methods": "GET,OPTIONS",
         },
         body: JSON.stringify({
@@ -61,7 +63,7 @@ exports.handler = async (event) => {
     const createdAt = item.createdAt?.S;
     const completedAt = item.completedAt?.S;
     const errorMessage = item.error?.S;
-    const s3Key = item.s3Key?.S;
+    const s3Key = item.s3Path?.S;
 
     // Build response object
     const response = {
@@ -91,7 +93,7 @@ exports.handler = async (event) => {
             Bucket: process.env.S3_BUCKET_NAME,
             Key: s3Key,
           }),
-          { expiresIn: 86400 } // 24 hours
+          { expiresIn: 86400 }, // 24 hours
         );
 
         response.publicUrl = presignedUrl;
@@ -108,12 +110,12 @@ exports.handler = async (event) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
         "Access-Control-Allow-Methods": "GET,OPTIONS",
       },
       body: JSON.stringify(response),
     };
-
   } catch (error) {
     console.error("Error processing status request:", error);
 
@@ -122,13 +124,15 @@ exports.handler = async (event) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
         "Access-Control-Allow-Methods": "GET,OPTIONS",
       },
       body: JSON.stringify({
         success: false,
         error: "Internal server error",
-        details: process.env.NODE_ENV === "development" ? error.message : undefined,
+        details:
+          process.env.NODE_ENV === "development" ? error.message : undefined,
       }),
     };
   }
@@ -148,3 +152,4 @@ function getStatusMessage(status) {
       return "Unknown status";
   }
 }
+

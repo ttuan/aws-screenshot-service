@@ -89,7 +89,7 @@ data "aws_iam_policy_document" "lambda_status_checker_policy" {
       "s3:GetObject"
     ]
     resources = [
-      "arn:aws:s3:::${var.project}-${var.env}/screenshots/*"
+      "arn:aws:s3:::${var.project}-${var.env}/*"
     ]
   }
 
