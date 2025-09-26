@@ -18,6 +18,17 @@ output "sqs_queue_url" {
   value       = aws_sqs_queue.screenshot_processing.url
 }
 
+# Dead Letter Queue outputs
+output "screenshot_processing_dlq_url" {
+  description = "URL of the screenshot processing Dead Letter Queue"
+  value       = aws_sqs_queue.screenshot_processing_dlq.url
+}
+
+output "screenshot_processing_dlq_arn" {
+  description = "ARN of the screenshot processing Dead Letter Queue"
+  value       = aws_sqs_queue.screenshot_processing_dlq.arn
+}
+
 ###################
 # ECS Cluster Outputs
 ###################

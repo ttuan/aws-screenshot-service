@@ -83,7 +83,10 @@ resource "aws_iam_policy" "ecs_sqs_policy" {
           "sqs:GetQueueAttributes",
           "sqs:ChangeMessageVisibility"
         ]
-        Resource = aws_sqs_queue.screenshot_processing.arn
+        Resource = [
+          aws_sqs_queue.screenshot_processing.arn,
+          aws_sqs_queue.screenshot_processing_dlq.arn
+        ]
       }
     ]
   })
