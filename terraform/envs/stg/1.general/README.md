@@ -2,7 +2,7 @@
 
 All general AWS resources of project
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -33,11 +33,7 @@ All general AWS resources of project
 
 ## Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_env"></a> [env](#input\_env) | Name of project environment | `string` | n/a | yes |
-| <a name="input_project"></a> [project](#input\_project) | Name of project | `string` | n/a | yes |
-| <a name="input_region"></a> [region](#input\_region) | Region of environment | `string` | n/a | yes |
+No inputs.
 
 ## Outputs
 
@@ -46,4 +42,4 @@ All general AWS resources of project
 | <a name="output_aws_account_id"></a> [aws\_account\_id](#output\_aws\_account\_id) | Show information about project, environment and account |
 | <a name="output_iam_role_lambda_example_arn"></a> [iam\_role\_lambda\_example\_arn](#output\_iam\_role\_lambda\_example\_arn) | ARN of IAM Role Lambda Example |
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | ID of VPC |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->

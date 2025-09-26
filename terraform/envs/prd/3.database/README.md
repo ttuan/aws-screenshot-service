@@ -1,4 +1,4 @@
-# prod
+# 3.database
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -7,7 +7,9 @@ No requirements.
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.12.0 |
 
 ## Modules
 
@@ -15,7 +17,9 @@ No modules.
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [aws_dynamodb_table.screenshot_jobs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table) | resource |
 
 ## Inputs
 
@@ -32,5 +36,9 @@ No resources.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_dynamodb_table_name"></a> [dynamodb\_table\_name](#output\_dynamodb\_table\_name) | DynamoDB table name for Lambda environment variables |
+| <a name="output_screenshot_jobs_table_arn"></a> [screenshot\_jobs\_table\_arn](#output\_screenshot\_jobs\_table\_arn) | ARN of the screenshot jobs DynamoDB table |
+| <a name="output_screenshot_jobs_table_name"></a> [screenshot\_jobs\_table\_name](#output\_screenshot\_jobs\_table\_name) | Name of the screenshot jobs DynamoDB table |
 <!-- END_TF_DOCS -->
