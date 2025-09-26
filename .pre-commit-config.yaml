@@ -1,0 +1,87 @@
+# Pre-commit hooks configuration for Terraform project
+# See https://pre-commit.com for more information
+repos:
+  # Terraform-specific hooks
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.94.1
+    hooks:
+      # Formats Terraform files with terraform fmt
+      - id: terraform_fmt
+
+      # Validates Terraform configuration files
+      - id: terraform_validate
+
+      # Generates documentation for Terraform modules
+      - id: terraform_docs
+        args:
+          - --hook-config=--path-to-file=README.md
+          - --hook-config=--add-to-existing-file=true
+          - --hook-config=--create-file-if-not-exist=true
+          - --hook-config=--content-template-path=.terraform-docs.yml
+
+      # Checks for Terraform security issues using tfsec
+      - id: terraform_tfsec
+        args:
+          - --args=--minimum-severity=MEDIUM
+
+      # Checks for Terraform anti-patterns using checkov
+      - id: terraform_checkov
+        args:
+          - --args=--framework terraform
+
+  # General code quality hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      # Prevents committing large files
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+
+      # Checks for files that would conflict in case-insensitive filesystems
+      - id: check-case-conflict
+
+      # Checks for merge conflict markers
+      - id: check-merge-conflict
+
+      # Checks YAML file syntax
+      - id: check-yaml
+        args: ['--unsafe']
+
+      # Checks JSON file syntax
+      - id: check-json
+
+      # Ensures files end with a newline
+      - id: end-of-file-fixer
+
+      # Trims trailing whitespace
+      - id: trailing-whitespace
+
+      # Sorts entries in requirements.txt
+      - id: requirements-txt-fixer
+
+  # Additional security scanning
+  # - repo: https://github.com/Yelp/detect-secrets
+  #   rev: v1.4.0
+  #   hooks:
+  #     - id: detect-secrets
+  #       args: ['--baseline', '.secrets.baseline']
+
+# Configuration for specific file types
+files: |
+  (?x)^(
+    .*\.tf$|
+    .*\.tfvars$|
+    .*\.yaml$|
+    .*\.yml$|
+    .*\.json$|
+    .*\.md$
+  )$
+
+# Exclude certain directories and files
+exclude: |
+  (?x)^(
+    \.terraform/.*|
+    \.terragrunt-cache/.*|
+    terraform\.tfstate.*|
+    \.terraform\.lock\.hcl
+  )$

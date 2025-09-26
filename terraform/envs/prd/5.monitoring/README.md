@@ -1,178 +1,68 @@
-# 📊 Monitoring Module
+<!-- BEGIN_TF_DOCS -->
+## Requirements
 
-Comprehensive monitoring and cost management for Screenshot Service.
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
 
-## 🏗️ Architecture
+## Providers
 
-```
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   CloudWatch    │    │   AWS Budgets    │    │  Cost Anomaly   │
-│     Alarms      │───▶│   & Alerts       │───▶│   Detection     │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
-         │                        │                       │
-         ▼                        ▼                       ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                     SNS Topic (Alerts)                         │
-│                  ┌─────────────────────┐                       │
-│                  │  Email (Optional)   │                       │
-│                  │  Slack (Future)     │                       │
-│                  │  PagerDuty (Future) │                       │
-│                  └─────────────────────┘                       │
-└─────────────────────────────────────────────────────────────────┘
-```
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.100.0 |
+| <a name="provider_terraform"></a> [terraform](#provider\_terraform) | n/a |
 
-## 📋 Components
+## Modules
 
-### 🔔 CloudWatch Alarms (8 alarms)
-| Alarm | Metric | Threshold | Purpose |
-|-------|--------|-----------|---------|
-| High Queue Depth | SQS Messages | > 50 | Processing bottlenecks |
-| DLQ Messages | DLQ Messages | > 0 | Failed requests |
-| ECS High CPU | ECS CPU | > 80% | Performance issues |
-| ECS High Memory | ECS Memory | > 85% | Memory pressure |
-| No Running Tasks | ECS Tasks | < 1 | Service availability |
-| Lambda Errors | Lambda Errors | > 5/5min | Function issues |
-| Lambda Duration | Lambda Duration | > 25s | Near-timeout |
-| Slow Processing | Screenshot Time | > 60s | Performance degradation |
+No modules.
 
-### 💰 Cost Management
-- **Monthly Budget**: $200 (configurable)
-- **Daily Budget**: $10 (configurable)
-- **ECS Budget**: $120 (configurable)
-- **Cost Anomaly Detection**: AI-powered unusual spending alerts
+## Resources
 
-### 📊 Dashboard
-4-widget CloudWatch dashboard with:
-- Screenshot processing time metrics
-- SQS queue metrics (main + DLQ)
-- ECS service utilization (CPU/Memory)
-- Service health metrics (task count, Lambda invocations/errors)
+| Name | Type |
+|------|------|
+| [aws_budgets_budget.ecs_budget](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/budgets_budget) | resource |
+| [aws_budgets_budget.screenshot_service_daily](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/budgets_budget) | resource |
+| [aws_budgets_budget.screenshot_service_monthly](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/budgets_budget) | resource |
+| [aws_cloudwatch_dashboard.screenshot_service](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_dashboard) | resource |
+| [aws_cloudwatch_log_metric_filter.screenshot_processing_time](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_metric_filter) | resource |
+| [aws_cloudwatch_metric_alarm.dlq_messages](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.ecs_high_cpu](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.ecs_high_memory](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.ecs_no_running_tasks](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.high_queue_depth](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.lambda_duration](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.lambda_errors](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.slow_screenshot_processing](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_sns_topic.alerts](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [terraform_remote_state.backend](https://registry.terraform.io/providers/hashicorp/terraform/latest/docs/data-sources/remote_state) | data source |
 
-## ⚙️ Configuration
+## Inputs
 
-### Basic Setup
-```hcl
-# terraform.prd.tfvars
-project = "screenshot-service"
-env     = "prd"
-region  = "us-east-1"
-```
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_alert_email"></a> [alert\_email](#input\_alert\_email) | Email address for receiving alerts and budget notifications | `string` | `""` | no |
+| <a name="input_container_image_tag"></a> [container\_image\_tag](#input\_container\_image\_tag) | Docker container image tag for the screenshot processing application | `string` | `"latest"` | no |
+| <a name="input_daily_budget_limit"></a> [daily\_budget\_limit](#input\_daily\_budget\_limit) | Daily budget limit in USD | `number` | `5` | no |
+| <a name="input_ecs_budget_limit"></a> [ecs\_budget\_limit](#input\_ecs\_budget\_limit) | ECS-specific monthly budget limit in USD | `number` | `10` | no |
+| <a name="input_env"></a> [env](#input\_env) | Name of project environment | `string` | n/a | yes |
+| <a name="input_monthly_budget_limit"></a> [monthly\_budget\_limit](#input\_monthly\_budget\_limit) | Monthly budget limit in USD | `number` | `20` | no |
+| <a name="input_project"></a> [project](#input\_project) | Name of project | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | Region of environment | `string` | n/a | yes |
 
-### Email Notifications (Optional)
-```hcl
-# terraform.prd.tfvars
-alert_email = "devops@yourcompany.com"
-```
+## Outputs
 
-### Custom Budget Limits (Optional)
-```hcl
-# terraform.prd.tfvars
-monthly_budget_limit = 300  # Default: 200
-daily_budget_limit   = 15   # Default: 10
-ecs_budget_limit     = 180  # Default: 120
-```
-
-## 🚀 Deployment
-
-```bash
-# Deploy monitoring
-make apply e=prd s=monitoring
-
-# View outputs
-make output e=prd s=monitoring
-```
-
-## 📈 Accessing Monitoring
-
-### CloudWatch Dashboard
-```bash
-# Dashboard URL available in outputs
-terraform output dashboard_url
-```
-
-### SNS Topic
-```bash
-# SNS Topic ARN for integration
-terraform output sns_alerts_topic_arn
-```
-
-### Budget Management
-```bash
-# View budget names and limits
-terraform output budget_limits
-```
-
-## 🔧 Customization
-
-### Adding More Notification Channels
-
-1. **Slack Integration**:
-```hcl
-resource "aws_sns_topic_subscription" "slack_alerts" {
-  topic_arn = aws_sns_topic.alerts.arn
-  protocol  = "https"
-  endpoint  = "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
-}
-```
-
-2. **PagerDuty Integration**:
-```hcl
-resource "aws_sns_topic_subscription" "pagerduty_alerts" {
-  topic_arn = aws_sns_topic.alerts.arn
-  protocol  = "https"
-  endpoint  = "https://events.pagerduty.com/integration/YOUR_INTEGRATION_KEY/enqueue"
-}
-```
-
-### Advanced Configuration
-
-For more dynamic configuration options, you can implement:
-- AWS Parameter Store for centralized config
-- AWS Secrets Manager for sensitive data
-- External data sources for complex integrations
-
-## 📊 Cost Breakdown
-
-| Component | Monthly Cost | Notes |
-|-----------|--------------|-------|
-| CloudWatch Alarms | $3.60 | 8 alarms × $0.10 × 4 weeks |
-| Enhanced Dashboard | $3.00 | Custom dashboard |
-| SNS Notifications | $0.50 | Per 1M notifications |
-| **Total** | **~$7/month** | Excellent ROI for 24/7 monitoring |
-
-## 🚨 Alert Scenarios
-
-### Critical Alerts
-- ECS tasks all stopped
-- DLQ has failed messages
-- Daily budget exceeded
-- Cost anomaly detected
-
-### Warning Alerts
-- High CPU/Memory usage
-- Queue depth building up
-- Monthly budget at 80%
-- Lambda near timeout
-
-## 🔍 Troubleshooting
-
-### No Email Alerts
-1. Check `alert_email` variable is set
-2. Confirm email subscription in SNS console
-3. Check spam folder for AWS confirmation email
-
-### Missing Metrics
-1. Verify ECS log group exists: `/ecs/screenshot-service-prd-screenshot-processor`
-2. Check log metric filter pattern matches application logs
-3. Ensure applications are writing logs in expected format
-
-### Budget Alerts Not Working
-1. Verify resources are tagged with `Project:screenshot-service`
-2. Check budget notification settings in AWS Console
-3. Ensure cost allocation tags are enabled
-
-## 📚 References
-
-- [AWS CloudWatch Alarms](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html)
-- [AWS Budgets](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html)
-- [Cost Anomaly Detection](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/getting-started-ad.html)
+| Name | Description |
+|------|-------------|
+| <a name="output_alarm_names"></a> [alarm\_names](#output\_alarm\_names) | List of all CloudWatch alarm names |
+| <a name="output_budget_limits"></a> [budget\_limits](#output\_budget\_limits) | Summary of all budget limits |
+| <a name="output_daily_budget_name"></a> [daily\_budget\_name](#output\_daily\_budget\_name) | Name of the daily budget |
+| <a name="output_dashboard_name"></a> [dashboard\_name](#output\_dashboard\_name) | Name of the CloudWatch dashboard |
+| <a name="output_dashboard_url"></a> [dashboard\_url](#output\_dashboard\_url) | URL to the CloudWatch dashboard |
+| <a name="output_ecs_budget_name"></a> [ecs\_budget\_name](#output\_ecs\_budget\_name) | Name of the ECS-specific budget |
+| <a name="output_email_subscription_configured"></a> [email\_subscription\_configured](#output\_email\_subscription\_configured) | Whether email subscription is configured |
+| <a name="output_monthly_budget_name"></a> [monthly\_budget\_name](#output\_monthly\_budget\_name) | Name of the monthly budget |
+| <a name="output_sns_alerts_topic_arn"></a> [sns\_alerts\_topic\_arn](#output\_sns\_alerts\_topic\_arn) | ARN of the SNS topic for alerts |
+| <a name="output_sns_alerts_topic_name"></a> [sns\_alerts\_topic\_name](#output\_sns\_alerts\_topic\_name) | Name of the SNS topic for alerts |
+<!-- END_TF_DOCS -->
