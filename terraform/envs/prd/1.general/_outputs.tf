@@ -36,3 +36,19 @@ output "lambda_screenshot_status_checker_role_arn" {
   value       = aws_iam_role.lambda_screenshot_status_checker.arn
   description = "ARN of the Lambda screenshot status checker IAM role"
 }
+
+# VPC Endpoints outputs
+output "vpc_endpoint_s3_id" {
+  value       = aws_vpc_endpoint.s3.id
+  description = "ID of the S3 VPC endpoint"
+}
+
+output "vpc_endpoint_dynamodb_id" {
+  value       = aws_vpc_endpoint.dynamodb.id
+  description = "ID of the DynamoDB VPC endpoint"
+}
+
+output "vpc_endpoints_security_group_id" {
+  value       = aws_security_group.vpc_endpoints.id
+  description = "ID of the security group for VPC endpoints"
+}
