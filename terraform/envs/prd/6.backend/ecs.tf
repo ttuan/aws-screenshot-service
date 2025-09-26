@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "screenshot_processor" {
   container_definitions = jsonencode([
     {
       name  = "screenshot-processor"
-      image = var.container_image_uri # This will need to be defined in variables
+      image = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.project}-${var.env}:${var.container_image_tag}"
 
       essential = true
 

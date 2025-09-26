@@ -16,7 +16,7 @@ terraform {
     key            = "1.general/terraform.prd.tfstate"
     region         = "us-east-1"
     encrypt        = true
-    kms_key_id     = "arn:aws:kms:us-east-1:534929761277:key/db485ffd-7bf1-43b2-9421-ebff58e40734"
+    kms_key_id     = "alias/screenshot-service-prd-iac"
     dynamodb_table = "screenshot-service-prd-terraform-state-lock"
   }
 }
