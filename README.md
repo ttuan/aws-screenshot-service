@@ -24,6 +24,8 @@ The AWS Screenshot Service implements a serverless, event-driven architecture fo
 Client Request → API Gateway → Lambda Functions → SQS → ECS Fargate → S3/DynamoDB
 ```
 
+Backend Source Code is located here: [screenshot-service](https://github.com/ttuan/screenshot-service)
+
 ### Core Components
 
 | Component | Purpose | Technology |
