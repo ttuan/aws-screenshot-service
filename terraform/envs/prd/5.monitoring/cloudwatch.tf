@@ -13,9 +13,9 @@ resource "aws_cloudwatch_log_metric_filter" "screenshot_processing_time" {
   pattern = "[w1, w2, w3, jobId, w4, processingTime, w5]"
 
   metric_transformation {
-    name      = "ProcessingTime"
-    namespace = "Screenshot/Service"
-    value     = "$processingTime"
+    name          = "ProcessingTime"
+    namespace     = "Screenshot/Service"
+    value         = "$processingTime"
     default_value = "0"
   }
 }

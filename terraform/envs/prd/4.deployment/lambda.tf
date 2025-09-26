@@ -4,13 +4,13 @@
 
 resource "aws_lambda_function" "screenshot_validator" {
   function_name    = "${var.project}-${var.env}-screenshot-validator"
-  role            = data.terraform_remote_state.general.outputs.lambda_screenshot_validator_role_arn
-  handler         = "index.handler"
-  runtime         = "nodejs20.x"
-  filename        = "lambda_functions/screenshot-validator/screenshot-validator.zip"
+  role             = data.terraform_remote_state.general.outputs.lambda_screenshot_validator_role_arn
+  handler          = "index.handler"
+  runtime          = "nodejs20.x"
+  filename         = "lambda_functions/screenshot-validator/screenshot-validator.zip"
   source_code_hash = filebase64sha256("lambda_functions/screenshot-validator/screenshot-validator.zip")
-  timeout         = 30
-  memory_size     = 256
+  timeout          = 30
+  memory_size      = 256
 
   environment {
     variables = {
@@ -48,13 +48,13 @@ resource "aws_cloudwatch_log_group" "lambda_logs" {
 
 resource "aws_lambda_function" "screenshot_status_checker" {
   function_name    = "${var.project}-${var.env}-screenshot-status-checker"
-  role            = data.terraform_remote_state.general.outputs.lambda_screenshot_status_checker_role_arn
-  handler         = "index.handler"
-  runtime         = "nodejs20.x"
-  filename        = "lambda_functions/screenshot-status.zip"
+  role             = data.terraform_remote_state.general.outputs.lambda_screenshot_status_checker_role_arn
+  handler          = "index.handler"
+  runtime          = "nodejs20.x"
+  filename         = "lambda_functions/screenshot-status.zip"
   source_code_hash = filebase64sha256("lambda_functions/screenshot-status.zip")
-  timeout         = 30
-  memory_size     = 256
+  timeout          = 30
+  memory_size      = 256
 
   environment {
     variables = {

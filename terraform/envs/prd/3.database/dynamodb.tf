@@ -2,9 +2,9 @@
 # DynamoDB Table for Screenshot Jobs
 ###################
 resource "aws_dynamodb_table" "screenshot_jobs" {
-  name           = "${var.project}-${var.env}-jobs"
-  billing_mode   = "PAY_PER_REQUEST"
-  hash_key       = "jobId"
+  name         = "${var.project}-${var.env}-jobs"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "jobId"
 
   attribute {
     name = "jobId"

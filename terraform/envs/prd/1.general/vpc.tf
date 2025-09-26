@@ -2,7 +2,7 @@
 # Create VPC and only one Nat Gateway for all AZs
 ###################
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source  = "terraform-aws-modules/vpc/aws"
   version = "~> 5.0"
 
   name = "${var.project}-${var.env}-vpc"

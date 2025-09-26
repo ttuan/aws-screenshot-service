@@ -48,7 +48,7 @@ resource "aws_appautoscaling_policy" "ecs_sqs_scaling" {
   service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
 
   target_tracking_scaling_policy_configuration {
-    target_value = 10.0  # Target 10 messages per task
+    target_value = 10.0 # Target 10 messages per task
 
     customized_metric_specification {
       metric_name = "ApproximateNumberOfMessagesVisible"
