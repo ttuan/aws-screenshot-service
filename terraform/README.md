@@ -352,7 +352,7 @@ Besides `${var.name}`, you can use `${var.type}`, `${var.region}`...depends on h
      lifecycle {
        create_before_destroy = true
      }
-   }   
+   }
    ```
 
 - Do not add `Project` & `Environment` tags in resources because we add it by default tag at `provider` function in `backend.tf` file.

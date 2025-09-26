@@ -36,7 +36,7 @@ resource "aws_sqs_queue" "screenshot_processing" {
   # Dead Letter Queue configuration
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.screenshot_processing_dlq.arn
-    maxReceiveCount     = 3  # Max retries before sending to DLQ
+    maxReceiveCount     = 3 # Max retries before sending to DLQ
   })
 
   tags = {
@@ -48,4 +48,3 @@ resource "aws_sqs_queue" "screenshot_processing" {
     Terraform   = "true"
   }
 }
-

@@ -111,10 +111,49 @@ resource "aws_api_gateway_deployment" "screenshot_api" {
     aws_api_gateway_integration.status_get
   ]
   rest_api_id = aws_api_gateway_rest_api.screenshot_api.id
+
+  # Force new deployment when API changes
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.api.id,
+      aws_api_gateway_resource.screenshot.id,
+      aws_api_gateway_resource.status.id,
+      aws_api_gateway_resource.status_job_id.id,
+      aws_api_gateway_method.screenshot_post.id,
+      aws_api_gateway_method.status_get.id,
+      aws_api_gateway_integration.screenshot_post.id,
+      aws_api_gateway_integration.status_get.id,
+    ]))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_api_gateway_stage" "prod" {
   deployment_id = aws_api_gateway_deployment.screenshot_api.id
   rest_api_id   = aws_api_gateway_rest_api.screenshot_api.id
   stage_name    = "prod"
+
+  tags = {
+    Name        = "${var.project}-${var.env}-api-stage"
+    Environment = var.env
+  }
+}
+
+###################
+# Rate Limiting Configuration
+###################
+
+resource "aws_api_gateway_method_settings" "screenshot_api_throttling" {
+  rest_api_id = aws_api_gateway_rest_api.screenshot_api.id
+  stage_name  = aws_api_gateway_stage.prod.stage_name
+  method_path = "*/*" # Apply to all methods
+
+  settings {
+    throttling_rate_limit  = 50  # requests per second
+    throttling_burst_limit = 100 # burst capacity
+    metrics_enabled        = true
+  }
 }

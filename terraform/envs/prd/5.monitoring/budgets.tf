@@ -4,11 +4,11 @@
 
 # Monthly Budget for Screenshot Service
 resource "aws_budgets_budget" "screenshot_service_monthly" {
-  name         = "${var.project}-${var.env}-monthly-budget"
-  budget_type  = "COST"
-  limit_amount = tostring(var.monthly_budget_limit)
-  limit_unit   = "USD"
-  time_unit    = "MONTHLY"
+  name              = "${var.project}-${var.env}-monthly-budget"
+  budget_type       = "COST"
+  limit_amount      = tostring(var.monthly_budget_limit)
+  limit_unit        = "USD"
+  time_unit         = "MONTHLY"
   time_period_start = "2024-01-01_00:00"
 
   cost_filter {
@@ -17,21 +17,21 @@ resource "aws_budgets_budget" "screenshot_service_monthly" {
   }
 
   notification {
-    comparison_operator         = "GREATER_THAN"
-    threshold                  = 80  # Alert at 80% of budget
+    comparison_operator        = "GREATER_THAN"
+    threshold                  = 80 # Alert at 80% of budget
     threshold_type             = "PERCENTAGE"
     notification_type          = "ACTUAL"
     subscriber_email_addresses = var.alert_email != "" ? [var.alert_email] : []
-    subscriber_sns_topic_arns   = [aws_sns_topic.alerts.arn]
+    subscriber_sns_topic_arns  = [aws_sns_topic.alerts.arn]
   }
 
   notification {
-    comparison_operator         = "GREATER_THAN"
-    threshold                  = 100  # Alert at 100% of budget
+    comparison_operator        = "GREATER_THAN"
+    threshold                  = 100 # Alert at 100% of budget
     threshold_type             = "PERCENTAGE"
     notification_type          = "FORECASTED"
     subscriber_email_addresses = var.alert_email != "" ? [var.alert_email] : []
-    subscriber_sns_topic_arns   = [aws_sns_topic.alerts.arn]
+    subscriber_sns_topic_arns  = [aws_sns_topic.alerts.arn]
   }
 
   tags = {
@@ -44,11 +44,11 @@ resource "aws_budgets_budget" "screenshot_service_monthly" {
 
 # Daily Budget for High Spend Detection
 resource "aws_budgets_budget" "screenshot_service_daily" {
-  name         = "${var.project}-${var.env}-daily-budget"
-  budget_type  = "COST"
-  limit_amount = tostring(var.daily_budget_limit)
-  limit_unit   = "USD"
-  time_unit    = "DAILY"
+  name              = "${var.project}-${var.env}-daily-budget"
+  budget_type       = "COST"
+  limit_amount      = tostring(var.daily_budget_limit)
+  limit_unit        = "USD"
+  time_unit         = "DAILY"
   time_period_start = "2024-01-01_00:00"
 
   cost_filter {
@@ -57,11 +57,11 @@ resource "aws_budgets_budget" "screenshot_service_daily" {
   }
 
   notification {
-    comparison_operator        = "GREATER_THAN"
-    threshold                 = 100  # Alert at 100% of daily budget
+    comparison_operator       = "GREATER_THAN"
+    threshold                 = 100 # Alert at 100% of daily budget
     threshold_type            = "PERCENTAGE"
-    notification_type          = "ACTUAL"
-    subscriber_sns_topic_arns  = [aws_sns_topic.alerts.arn]
+    notification_type         = "ACTUAL"
+    subscriber_sns_topic_arns = [aws_sns_topic.alerts.arn]
   }
 
   tags = {
@@ -74,11 +74,11 @@ resource "aws_budgets_budget" "screenshot_service_daily" {
 
 # ECS-specific Budget (highest cost component)
 resource "aws_budgets_budget" "ecs_budget" {
-  name         = "${var.project}-${var.env}-ecs-budget"
-  budget_type  = "COST"
-  limit_amount = tostring(var.ecs_budget_limit)
-  limit_unit   = "USD"
-  time_unit    = "MONTHLY"
+  name              = "${var.project}-${var.env}-ecs-budget"
+  budget_type       = "COST"
+  limit_amount      = tostring(var.ecs_budget_limit)
+  limit_unit        = "USD"
+  time_unit         = "MONTHLY"
   time_period_start = "2024-01-01_00:00"
 
   cost_filter {
@@ -92,11 +92,11 @@ resource "aws_budgets_budget" "ecs_budget" {
   }
 
   notification {
-    comparison_operator        = "GREATER_THAN"
-    threshold                 = 90   # Alert at 90% of ECS budget
+    comparison_operator       = "GREATER_THAN"
+    threshold                 = 90 # Alert at 90% of ECS budget
     threshold_type            = "PERCENTAGE"
-    notification_type          = "FORECASTED"
-    subscriber_sns_topic_arns  = [aws_sns_topic.alerts.arn]
+    notification_type         = "FORECASTED"
+    subscriber_sns_topic_arns = [aws_sns_topic.alerts.arn]
   }
 
   tags = {

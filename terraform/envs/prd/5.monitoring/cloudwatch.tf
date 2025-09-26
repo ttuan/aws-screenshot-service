@@ -327,7 +327,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_duration" {
   namespace           = "AWS/Lambda"
   period              = "300"
   statistic           = "Average"
-  threshold           = "25000"  # 25 seconds (timeout is 30s)
+  threshold           = "25000" # 25 seconds (timeout is 30s)
   alarm_description   = "This metric monitors Lambda function duration"
   alarm_actions       = [aws_sns_topic.alerts.arn]
 
@@ -352,7 +352,7 @@ resource "aws_cloudwatch_metric_alarm" "slow_screenshot_processing" {
   namespace           = "Screenshot/Service"
   period              = "300"
   statistic           = "Average"
-  threshold           = "60000"  # 60 seconds
+  threshold           = "60000" # 60 seconds
   alarm_description   = "This metric monitors screenshot processing time"
   alarm_actions       = [aws_sns_topic.alerts.arn]
 
