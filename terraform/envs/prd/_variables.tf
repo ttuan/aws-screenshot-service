@@ -10,8 +10,8 @@ variable "region" {
   description = "Region of environment"
   type        = string
 }
-variable "container_image_uri" {
-  description = "Docker container image URI for the screenshot processing application"
+variable "container_image_tag" {
+  description = "Docker container image tag for the screenshot processing application"
   type        = string
-  default     = ""
+  default     = "latest"
 }

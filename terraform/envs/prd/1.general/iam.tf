@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "lambda_sqs_policy" {
       "sqs:SendMessage"
     ]
     resources = [
-      "arn:aws:sqs:${var.region}:*:${var.project}-${var.env}-processing-queue"
+      "arn:aws:sqs:${var.region}:${data.aws_caller_identity.current.account_id}:${var.project}-${var.env}-processing-queue"
     ]
   }
 
@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "lambda_sqs_policy" {
       "dynamodb:GetItem"
     ]
     resources = [
-      "arn:aws:dynamodb:${var.region}:*:table/${var.project}-${var.env}-jobs"
+      "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${var.project}-${var.env}-jobs"
     ]
   }
 
@@ -45,7 +45,8 @@ data "aws_iam_policy_document" "lambda_sqs_policy" {
       "logs:PutLogEvents"
     ]
     resources = [
-      "arn:aws:logs:${var.region}:*:*"
+      "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.project}-${var.env}-*",
+      "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.project}-${var.env}-*:*"
     ]
   }
 }
@@ -79,7 +80,7 @@ data "aws_iam_policy_document" "lambda_status_checker_policy" {
       "dynamodb:GetItem"
     ]
     resources = [
-      "arn:aws:dynamodb:${var.region}:*:table/${var.project}-${var.env}-jobs"
+      "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${var.project}-${var.env}-jobs"
     ]
   }
 
@@ -101,7 +102,8 @@ data "aws_iam_policy_document" "lambda_status_checker_policy" {
       "logs:PutLogEvents"
     ]
     resources = [
-      "arn:aws:logs:${var.region}:*:*"
+      "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.project}-${var.env}-*",
+      "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.project}-${var.env}-*:*"
     ]
   }
 }
