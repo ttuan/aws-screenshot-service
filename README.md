@@ -61,19 +61,19 @@ Backend Source Code is located here: [screenshot-service](https://github.com/ttu
 
 2. **AWS Profile Configuration**
 
-Recomended: Use [aws-vault](https://github.com/99designs/aws-vault) to manage your profile.
+	Recomended: Use [aws-vault](https://github.com/99designs/aws-vault) to manage your profile.
 
-```bash
-# If you using aws-vault
-aws-vault exec screenshot-service-prd
+	```bash
+	# If you using aws-vault
+	aws-vault exec screenshot-service-prd
 
-# For environments without MFA
-aws configure --profile screenshot-service-prd
-aws configure --profile screenshot-service-stg
+	# For environments without MFA
+	aws configure --profile screenshot-service-prd
+	aws configure --profile screenshot-service-stg
 
-# For environments with MFA (recommended)
-aws configure --profile screenshot-service-default
-```
+	# For environments with MFA (recommended)
+	aws configure --profile screenshot-service-default
+	```
 
 3. **MFA Configuration** (Optional but recommended)
    ```bash
@@ -137,7 +137,7 @@ aws-screenshot-service/
 └── README.md
 ```
 
-### Service Deployment Order
+### ⚠️ Service Deployment Order
 
 #### 🔨 Backend Setup - IMPORTANT
 
@@ -157,7 +157,7 @@ git clone git@github.com:ttuan/screenshot-service.git
 
 #### AWS Resource Deployment Order
 
-Services must be deployed in the following order due to dependencies:
+**Services must be deployed in the following order due to dependencies**:
 
 1. **general** - VPC, IAM roles, S3 buckets, KMS
 2. **admin** - Administrative resources
