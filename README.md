@@ -63,17 +63,17 @@ Backend Source Code is located here: [screenshot-service](https://github.com/ttu
 
 Recomended: Use [aws-vault](https://github.com/99designs/aws-vault) to manage your profile.
 
-   ```bash
-   # If you using aws-vault
-   aws-vault exec screenshot-service-prd
+```bash
+# If you using aws-vault
+aws-vault exec screenshot-service-prd
 
-   # For environments without MFA
-   aws configure --profile screenshot-service-prd
-   aws configure --profile screenshot-service-stg
+# For environments without MFA
+aws configure --profile screenshot-service-prd
+aws configure --profile screenshot-service-stg
 
-   # For environments with MFA (recommended)
-   aws configure --profile screenshot-service-default
-   ```
+# For environments with MFA (recommended)
+aws configure --profile screenshot-service-default
+```
 
 3. **MFA Configuration** (Optional but recommended)
    ```bash
@@ -94,7 +94,6 @@ Before deploying Terraform resources, create the required backend infrastructure
 # Run the automated setup script
 ./scripts/pre-build.sh
 ```
-
 
 ### 2. MFA Token Generation
 
@@ -145,10 +144,9 @@ Services must be deployed in the following order due to dependencies:
 1. **general** - VPC, IAM roles, S3 buckets
 2. **admin** - Administrative resources
 3. **database** - DynamoDB tables
-4. **deployment** - Lambda functions, API Gateway
-5. **backend** - ECS cluster, SQS queues, auto-scaling
+4. **backend** - ECS cluster, SQS queues, auto-scaling
+5. **deployment** - Lambda functions, API Gateway
 6. **monitoring** - CloudWatch resources
-
 
 ## ⚙️ Configuration
 
@@ -166,16 +164,16 @@ vim terraform/envs/stg/terraform.stg.tfvars
 
 ### Required Variables
 
-| Variable              | Description                    | Example                                                               |
-| --------------------- | ------------------------------ | --------------------------------------------------------------------- |
-| `project`             | Project name                   | `screenshot-service`                                                  |
-| `env`                 | Environment name               | `prd` or `stg`                                                        |
-| `region`              | AWS region                     | `us-east-1`                                                           |
-| `container_image_tag` | ECS container image tag        | `latest`                                                              |
-| `alert_email`         | Email for alerts (optional)    | `user@example.com`                                                    |
-| `monthly_budget_limit`| Monthly budget limit (optional)| `10`                                                                  |
-| `daily_budget_limit`  | Daily budget limit (optional)  | `1`                                                                   |
-| `ecs_budget_limit`    | ECS budget limit (optional)    | `5`                                                                   |
+| Variable               | Description                     | Example              |
+| ---------------------- | ------------------------------- | -------------------- |
+| `project`              | Project name                    | `screenshot-service` |
+| `env`                  | Environment name                | `prd` or `stg`       |
+| `region`               | AWS region                      | `us-east-1`          |
+| `container_image_tag`  | ECS container image tag         | `latest`             |
+| `alert_email`          | Email for alerts (optional)     | `user@example.com`   |
+| `monthly_budget_limit` | Monthly budget limit (optional) | `10`                 |
+| `daily_budget_limit`   | Daily budget limit (optional)   | `1`                  |
+| `ecs_budget_limit`     | ECS budget limit (optional)     | `5`                  |
 
 ## 🚢 Deployment
 
