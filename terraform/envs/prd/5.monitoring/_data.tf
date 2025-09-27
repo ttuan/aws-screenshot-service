@@ -1,9 +1,9 @@
-# Get ECS log group name from backend module
-data "terraform_remote_state" "backend" {
+# Get KMS key from general module
+data "terraform_remote_state" "general" {
   backend = "s3"
   config = {
     bucket = "screenshot-service-prd-iac-state"
-    key    = "6.backend/terraform.prd.tfstate"
+    key    = "1.general/terraform.prd.tfstate"
     region = "us-east-1"
   }
 }
