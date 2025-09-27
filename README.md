@@ -40,7 +40,7 @@ Backend Source Code is located here: [screenshot-service](https://github.com/ttu
 
 ### Available Environments
 
-- **STG** (`ap-northeast-1`): Staging environment for testing
+- ~~**STG** (`ap-northeast-1`): Staging environment for testing~~
 - **PRD** (`us-east-1`): Production environment
 
 ## 🔧 Prerequisites
@@ -61,7 +61,12 @@ Backend Source Code is located here: [screenshot-service](https://github.com/ttu
 
 2. **AWS Profile Configuration**
 
+Recomended: Use [aws-vault](https://github.com/99designs/aws-vault) to manage your profile.
+
    ```bash
+   # If you using aws-vault
+   aws-vault exec screenshot-service-prd
+
    # For environments without MFA
    aws configure --profile screenshot-service-prd
    aws configure --profile screenshot-service-stg
@@ -83,39 +88,13 @@ Backend Source Code is located here: [screenshot-service](https://github.com/ttu
 
 ### 1. Initial Infrastructure Setup
 
-Before deploying Terraform resources, create the required backend infrastructure:
+Before deploying Terraform resources, create the required backend infrastructure: s3 backed bucket, dynamoDB table, KMS alias, ..
 
 ```bash
 # Run the automated setup script
 ./scripts/pre-build.sh
 ```
 
-**Manual Setup** (if preferred):
-
-```bash
-# Set environment variables
-export PROJECT="screenshot-service"
-export ENV="prd"  # or "stg"
-export REGION="us-east-1"  # or "ap-northeast-1" for staging
-
-# Create S3 bucket for Terraform state
-aws s3api create-bucket --bucket $PROJECT-$ENV-iac-state --region $REGION --profile $PROJECT-$ENV
-
-# Create DynamoDB table for state locking
-aws dynamodb create-table \
-    --table-name $PROJECT-$ENV-terraform-state-lock \
-    --attribute-definitions AttributeName=LockID,AttributeType=S \
-    --key-schema AttributeName=LockID,KeyType=HASH \
-    --billing-mode PAY_PER_REQUEST \
-    --region $REGION \
-    --profile $PROJECT-$ENV
-
-# Create KMS key for encryption
-KMS_KEY_ID=$(aws kms create-key --description "Encrypt tfstate in s3 backend" \
-    --query "KeyMetadata.KeyId" --output text --profile $PROJECT-$ENV --region $REGION)
-aws kms create-alias --alias-name alias/$PROJECT-$ENV-iac \
-    --target-key-id $KMS_KEY_ID --profile $PROJECT-$ENV --region $REGION
-```
 
 ### 2. MFA Token Generation
 
@@ -163,12 +142,13 @@ aws-screenshot-service/
 
 Services must be deployed in the following order due to dependencies:
 
-1. **1.general** - VPC, IAM roles, S3 buckets
-2. **2.admin** - Administrative resources
-3. **3.database** - DynamoDB tables
-4. **4.deployment** - Lambda functions, API Gateway
-5. **5.monitoring** - CloudWatch resources
-6. **6.backend** - ECS cluster, SQS queues, auto-scaling
+1. **general** - VPC, IAM roles, S3 buckets
+2. **admin** - Administrative resources
+3. **database** - DynamoDB tables
+4. **deployment** - Lambda functions, API Gateway
+5. **backend** - ECS cluster, SQS queues, auto-scaling
+6. **monitoring** - CloudWatch resources
+
 
 ## ⚙️ Configuration
 
@@ -186,12 +166,16 @@ vim terraform/envs/stg/terraform.stg.tfvars
 
 ### Required Variables
 
-| Variable              | Description         | Example                                                               |
-| --------------------- | ------------------- | --------------------------------------------------------------------- |
-| `project`             | Project name        | `screenshot-service`                                                  |
-| `env`                 | Environment name    | `prd` or `stg`                                                        |
-| `region`              | AWS region          | `us-east-1`                                                           |
-| `container_image_uri` | ECS container image | `123456789.dkr.ecr.us-east-1.amazonaws.com/screenshot-service:latest` |
+| Variable              | Description                    | Example                                                               |
+| --------------------- | ------------------------------ | --------------------------------------------------------------------- |
+| `project`             | Project name                   | `screenshot-service`                                                  |
+| `env`                 | Environment name               | `prd` or `stg`                                                        |
+| `region`              | AWS region                     | `us-east-1`                                                           |
+| `container_image_tag` | ECS container image tag        | `latest`                                                              |
+| `alert_email`         | Email for alerts (optional)    | `user@example.com`                                                    |
+| `monthly_budget_limit`| Monthly budget limit (optional)| `10`                                                                  |
+| `daily_budget_limit`  | Daily budget limit (optional)  | `1`                                                                   |
+| `ecs_budget_limit`    | ECS budget limit (optional)    | `5`                                                                   |
 
 ## 🚢 Deployment
 
@@ -345,14 +329,6 @@ aws logs describe-log-groups --log-group-name-prefix "/ecs/screenshot-service" -
    make plan e=prd s=backend  # Deploy backend services last
    ```
 
-The correct order to build the app from scratch is:
-
-```
-general -> database -> deployment -> backend -> monitoring
-```
-
-And to destroy the app, follow the reverse order.
-
 4. **ECS Task Failures**
 
    ```bash
@@ -402,11 +378,3 @@ make plan e=prd s=service.name | tee plan.out
 - Use consistent resource tagging
 - Document all variables and outputs
 - Test in staging before production deployment
-
-## 📞 Support
-
-For issues and questions:
-
-1. Check the [Troubleshooting](#-troubleshooting) section
-2. Review CloudWatch logs and metrics
-3. Contact the DevOps team
