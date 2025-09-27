@@ -47,5 +47,5 @@ output "status_endpoint" {
 
 output "backend_integration_status" {
   description = "Status of backend integration"
-  value       = try(data.terraform_remote_state.backend.outputs.sqs_queue_url, null) != null ? "Backend integrated - Lambda has SQS queue URL" : "Backend NOT integrated - Deploy backend service and re-apply deployment"
+  value       = "Backend integrated - Lambda has SQS queue URL: ${data.terraform_remote_state.backend.outputs.sqs_queue_url}"
 }

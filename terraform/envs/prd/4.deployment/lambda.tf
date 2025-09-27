@@ -14,7 +14,7 @@ resource "aws_lambda_function" "screenshot_validator" {
 
   environment {
     variables = {
-      SQS_QUEUE_URL  = try(data.terraform_remote_state.backend.outputs.sqs_queue_url, "BACKEND_NOT_DEPLOYED_YET")
+      SQS_QUEUE_URL  = data.terraform_remote_state.backend.outputs.sqs_queue_url
       DYNAMODB_TABLE = data.terraform_remote_state.database.outputs.dynamodb_table_name
       NODE_ENV       = "production"
     }
