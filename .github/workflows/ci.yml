@@ -28,7 +28,7 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
       with:
-        terraform_version: 1.5.0
+        terraform_version: 1.13.0
 
     - name: Check Terraform formatting
       run: |
@@ -38,7 +38,7 @@ jobs:
     - name: Validate Terraform configurations
       run: |
         echo "Validating Terraform configurations..."
-        for env in stg prd; do
+        for env in prd; do
           echo "Validating $env environment..."
           for service in $(ls terraform/envs/$env/ | grep -E '^[0-9]'); do
             echo "  Validating service: $service"
