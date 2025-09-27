@@ -49,6 +49,24 @@ data "aws_iam_policy_document" "lambda_sqs_policy" {
       "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.project}-${var.env}-*:*"
     ]
   }
+
+  # KMS permissions for Lambda to access encrypted SQS
+  statement {
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey",
+      "kms:DescribeKey"
+    ]
+    resources = [
+      "arn:aws:kms:${var.region}:${data.aws_caller_identity.current.account_id}:key/*"
+    ]
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["sqs.${var.region}.amazonaws.com"]
+    }
+  }
 }
 
 ###################
@@ -104,6 +122,19 @@ data "aws_iam_policy_document" "lambda_status_checker_policy" {
     resources = [
       "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.project}-${var.env}-*",
       "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.project}-${var.env}-*:*"
+    ]
+  }
+
+  # KMS permissions for Lambda to access encrypted S3
+  statement {
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey",
+      "kms:DescribeKey"
+    ]
+    resources = [
+      aws_kms_key.s3.arn
     ]
   }
 }

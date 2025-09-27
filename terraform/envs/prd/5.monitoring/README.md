@@ -67,4 +67,6 @@ No modules.
 | <a name="output_monthly_budget_name"></a> [monthly\_budget\_name](#output\_monthly\_budget\_name) | Name of the monthly budget |
 | <a name="output_sns_alerts_topic_arn"></a> [sns\_alerts\_topic\_arn](#output\_sns\_alerts\_topic\_arn) | ARN of the SNS topic for alerts |
 | <a name="output_sns_alerts_topic_name"></a> [sns\_alerts\_topic\_name](#output\_sns\_alerts\_topic\_name) | Name of the SNS topic for alerts |
+| <a name="output_sns_kms_key_arn"></a> [sns\_kms\_key\_arn](#output\_sns\_kms\_key\_arn) | ARN of the SNS KMS key |
+| <a name="output_sns_kms_key_id"></a> [sns\_kms\_key\_id](#output\_sns\_kms\_key\_id) | ID of the SNS KMS key |
 <!-- END_TF_DOCS -->

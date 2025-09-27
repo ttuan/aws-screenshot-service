@@ -186,6 +186,48 @@ resource "aws_iam_role_policy_attachment" "ecs_task_dynamodb_policy" {
   policy_arn = aws_iam_policy.ecs_dynamodb_policy.arn
 }
 
+###################
+# KMS Access Policy
+###################
+
+resource "aws_iam_policy" "ecs_kms_policy" {
+  name        = "${var.project}-${var.env}-ecs-kms-policy"
+  description = "Policy for ECS task to access KMS keys"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt",
+          "kms:GenerateDataKey",
+          "kms:GenerateDataKeyWithoutPlaintext",
+          "kms:DescribeKey"
+        ]
+        Resource = [
+          aws_kms_key.sqs.arn,
+          data.terraform_remote_state.general.outputs.s3_kms_key_arn,
+          data.terraform_remote_state.monitoring.outputs.sns_kms_key_arn
+        ]
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "${var.project}-${var.env}-ecs-kms-policy"
+    Environment = var.env
+    Project     = var.project
+    Service     = "screenshot-processing"
+    Terraform   = "true"
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_task_kms_policy" {
+  role       = aws_iam_role.ecs_task.name
+  policy_arn = aws_iam_policy.ecs_kms_policy.arn
+}
+
 # Minimal policy for ECS Execute Command
 resource "aws_iam_role_policy_attachment" "ecs_task_ssm_policy" {
   role       = aws_iam_role.ecs_task.name
