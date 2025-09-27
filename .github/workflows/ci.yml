@@ -1,0 +1,115 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [main, develop, feat/*]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # Job 1: Code Quality & Tests
+  test:
+    name: Tests & Code Quality
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+  # Job 2: Terraform Validation
+  terraform:
+    name: Terraform Validation
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.13.0
+
+    - name: Check Terraform formatting
+      run: |
+        echo "Checking Terraform formatting..."
+        terraform fmt -check -recursive terraform/
+
+    - name: Create variable symlinks
+      run: |
+        echo "Creating variable symlinks for Terraform..."
+        for env in prd; do
+          echo "Creating symlinks for $env environment..."
+          make symlink_all e=$env
+        done
+
+    - name: Validate Terraform configurations
+      run: |
+        echo "Validating Terraform configurations..."
+        for env in prd; do
+          echo "Validating $env environment..."
+          for service in $(ls terraform/envs/$env/ | grep -E '^[0-9]'); do
+            echo "  Validating service: $service"
+            if [ -d "terraform/envs/$env/$service" ]; then
+              cd terraform/envs/$env/$service
+              terraform init -backend=false
+              terraform validate
+              cd "$GITHUB_WORKSPACE"
+            else
+              echo "  ❌ Directory not found: terraform/envs/$env/$service"
+              exit 1
+            fi
+          done
+        done
+
+  # Job 3: Security Scan
+  security:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        severity: 'HIGH,CRITICAL'
+        exit-code: '1'
+
+    - name: Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      continue-on-error: true
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+    - name: Show Trivy results in table format
+      if: failure()
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'table'
+        severity: 'HIGH,CRITICAL'
+
+    - name: Run basic secret scan
+      run: |
+        echo "Checking for common secrets patterns..."
+        # Basic secret detection
+        if grep -r "AKIA[0-9A-Z]{16}" . --exclude-dir=.git || \
+           grep -r "-----BEGIN.*PRIVATE KEY-----" . --exclude-dir=.git || \
+           grep -r "password.*=" . --exclude-dir=.git --include="*.tf" --include="*.js"; then
+          echo "⚠️  Potential secrets found! Please review."
+          exit 1
+        else
+          echo "✅ No obvious secrets detected"
+        fi

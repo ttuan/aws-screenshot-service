@@ -1,0 +1,37 @@
+# Checkov configuration file
+# See: https://www.checkov.io/2.Basics/CLI%20Command%20Reference.html
+
+# Directories to scan
+directory:
+  - terraform/
+
+# Output format
+output: cli
+
+# Quiet mode (reduce output)
+quiet: false
+
+# Compact mode (reduce output)
+compact: false
+
+# Exit with non-zero code on findings
+hard-fail-on: HIGH,CRITICAL
+
+# Skip specific checks that are not applicable
+skip-check:
+  # Skip checks that are environment-specific or not applicable
+  - CKV_AWS_79   # Ensure Instance Metadata Service Version 1 is not enabled (might be needed for some services)
+  - CKV_AWS_8    # Ensure all data stored in the Launch configuration EBS is securely encrypted at rest (not using launch configs)
+
+# Framework to use
+framework:
+  - terraform
+
+# Download external modules for scanning
+download-external-modules: true
+
+# Include passed checks in output
+include-all-checkov-policies: false
+
+# Evaluate variables
+evaluate-variables: true

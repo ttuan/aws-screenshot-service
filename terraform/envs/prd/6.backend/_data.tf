@@ -22,6 +22,16 @@ data "terraform_remote_state" "database" {
   }
 }
 
+# Get monitoring information for SNS KMS key
+data "terraform_remote_state" "monitoring" {
+  backend = "s3"
+  config = {
+    bucket = "screenshot-service-prd-iac-state"
+    key    = "5.monitoring/terraform.prd.tfstate"
+    region = "us-east-1"
+  }
+}
+
 # Get current AWS region
 data "aws_region" "current" {}
 

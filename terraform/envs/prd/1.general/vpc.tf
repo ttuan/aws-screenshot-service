@@ -73,12 +73,13 @@ resource "aws_security_group" "vpc_endpoints" {
     cidr_blocks = [module.vpc.vpc_cidr_block]
   }
 
+  # Restricted egress - only HTTPS for AWS services
   egress {
-    description = "All outbound traffic"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    description = "HTTPS to AWS services"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Required for AWS API calls
   }
 
   tags = {

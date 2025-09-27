@@ -86,7 +86,7 @@ Before deploying Terraform resources, create the required backend infrastructure
 
 ```bash
 # Run the automated setup script
-./pre-build.sh
+./scripts/pre-build.sh
 ```
 
 **Manual Setup** (if preferred):
@@ -120,7 +120,7 @@ aws kms create-alias --alias-name alias/$PROJECT-$ENV-iac \
 If using MFA (recommended for production):
 
 ```bash
-./create-aws-sts.sh screenshot-service-default screenshot-service-prd ACCOUNT_ID IAM_USER_NAME TOKEN_CODE
+./scripts/create-aws-sts.sh screenshot-service-default screenshot-service-prd ACCOUNT_ID IAM_USER_NAME TOKEN_CODE
 ```
 
 ### 3. Environment Variables
@@ -149,6 +149,7 @@ aws-screenshot-service/
 │   └── README.md
 ├── terraform-dependencies/        # CodeBuild/CodeDeploy configs
 ├── scripts/
+│   ├── ci-local.sh                # Local CI validation
 │   ├── create-aws-sts.sh          # MFA token generation
 │   ├── pre-build.sh               # Infrastructure bootstrap
 │   └── test-screenshot-requests.sh # Load testing script
@@ -258,7 +259,7 @@ Use the provided script to test the screenshot service:
 
 ```bash
 # Test with default settings (150 requests)
-./test-screenshot-requests.sh
+./scripts/test-screenshot-requests.sh
 
 # Edit the script to customize:
 # - API_ENDPOINT: Your API Gateway endpoint
@@ -328,7 +329,7 @@ aws logs describe-log-groups --log-group-name-prefix "/ecs/screenshot-service" -
 2. **Permission Errors**
    ```bash
    # Refresh MFA token
-   ./create-aws-sts.sh screenshot-service-default screenshot-service-prd ACCOUNT_ID IAM_USER_NAME NEW_TOKEN
+   ./scripts/create-aws-sts.sh screenshot-service-default screenshot-service-prd ACCOUNT_ID IAM_USER_NAME NEW_TOKEN
    ```
 
 3. **Resource Dependencies**

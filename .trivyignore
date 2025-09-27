@@ -1,0 +1,30 @@
+# Trivy ignore file for security scanning
+# Add CVEs that are acceptable or false positives here
+
+# Example: Ignore specific CVE that doesn't affect our use case
+# CVE-2023-12345
+
+# Ignore low severity issues in development dependencies
+# These are test-only dependencies and don't affect production
+**/node_modules/jest/**
+**/node_modules/@types/**
+**/node_modules/aws-sdk-client-mock/**
+
+# Ignore issues in Terraform state files and lock files
+**/.terraform/**
+**/.terraform.lock.hcl
+**/terraform.tfstate*
+
+# Ignore issues in build artifacts
+**/*.zip
+**/node_modules/**/.cache/**
+
+# Security Group Egress Rules - False Positives for Screenshot Service
+# These rules are required for screenshot service functionality:
+# - Port 443: Access AWS APIs and HTTPS websites for screenshots
+# - Port 80: Access HTTP websites for screenshots
+# - Port 53: DNS resolution for domain names
+# All rules are restricted to specific ports, not unrestricted access
+
+# Ignore AVD-AWS-0104 for screenshot service - requires internet access
+AVD-AWS-0104

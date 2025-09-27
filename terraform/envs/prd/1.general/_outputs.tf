@@ -26,6 +26,17 @@ output "screenshots_bucket_arn" {
   description = "ARN of the screenshots S3 bucket"
 }
 
+# KMS Key outputs
+output "s3_kms_key_arn" {
+  value       = aws_kms_key.s3.arn
+  description = "ARN of the S3 KMS key"
+}
+
+output "s3_kms_key_id" {
+  value       = aws_kms_key.s3.key_id
+  description = "ID of the S3 KMS key"
+}
+
 # IAM Role outputs for Lambda
 output "lambda_screenshot_validator_role_arn" {
   value       = aws_iam_role.lambda_screenshot_validator.arn

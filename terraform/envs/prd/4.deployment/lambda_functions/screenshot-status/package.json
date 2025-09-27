@@ -4,12 +4,26 @@
   "description": "Lambda function to check screenshot job status and generate S3 URLs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.629.0",
     "@aws-sdk/client-s3": "^3.629.0",
     "@aws-sdk/s3-request-presigner": "^3.629.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "aws-sdk-client-mock": "^3.0.0",
+    "@types/jest": "^29.5.5"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "*.js",
+      "!node_modules/**"
+    ]
   },
   "keywords": [
     "aws",

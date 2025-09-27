@@ -7,8 +7,8 @@ resource "aws_lambda_function" "screenshot_validator" {
   role             = data.terraform_remote_state.general.outputs.lambda_screenshot_validator_role_arn
   handler          = "index.handler"
   runtime          = "nodejs20.x"
-  filename         = "lambda_functions/screenshot-validator/screenshot-validator.zip"
-  source_code_hash = filebase64sha256("lambda_functions/screenshot-validator/screenshot-validator.zip")
+  filename         = "lambda_functions/screenshot-validator.zip"
+  source_code_hash = filebase64sha256("lambda_functions/screenshot-validator.zip")
   timeout          = 30
   memory_size      = 256
 

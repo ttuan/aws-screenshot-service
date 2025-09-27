@@ -30,6 +30,8 @@ All general AWS resources of project
 | [aws_iam_role.lambda_screenshot_validator](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.lambda_screenshot_status_checker_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.lambda_screenshot_validator_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_kms_alias.s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
+| [aws_kms_key.s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_s3_bucket.screenshots](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket_cors_configuration.screenshots](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_cors_configuration) | resource |
 | [aws_s3_bucket_lifecycle_configuration.screenshots](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration) | resource |
@@ -71,6 +73,8 @@ All general AWS resources of project
 | <a name="output_aws_account_id"></a> [aws\_account\_id](#output\_aws\_account\_id) | Show information about project, environment and account |
 | <a name="output_lambda_screenshot_status_checker_role_arn"></a> [lambda\_screenshot\_status\_checker\_role\_arn](#output\_lambda\_screenshot\_status\_checker\_role\_arn) | ARN of the Lambda screenshot status checker IAM role |
 | <a name="output_lambda_screenshot_validator_role_arn"></a> [lambda\_screenshot\_validator\_role\_arn](#output\_lambda\_screenshot\_validator\_role\_arn) | ARN of the Lambda screenshot validator IAM role |
+| <a name="output_s3_kms_key_arn"></a> [s3\_kms\_key\_arn](#output\_s3\_kms\_key\_arn) | ARN of the S3 KMS key |
+| <a name="output_s3_kms_key_id"></a> [s3\_kms\_key\_id](#output\_s3\_kms\_key\_id) | ID of the S3 KMS key |
 | <a name="output_screenshots_bucket_arn"></a> [screenshots\_bucket\_arn](#output\_screenshots\_bucket\_arn) | ARN of the screenshots S3 bucket |
 | <a name="output_screenshots_bucket_name"></a> [screenshots\_bucket\_name](#output\_screenshots\_bucket\_name) | Name of the screenshots S3 bucket |
 | <a name="output_vpc_endpoint_dynamodb_id"></a> [vpc\_endpoint\_dynamodb\_id](#output\_vpc\_endpoint\_dynamodb\_id) | ID of the DynamoDB VPC endpoint |
