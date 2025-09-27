@@ -28,15 +28,15 @@ Backend Source Code is located here: [screenshot-service](https://github.com/ttu
 
 ### Core Components
 
-| Component | Purpose | Technology |
-|-----------|---------|------------|
-| **API Gateway** | RESTful endpoint with throttling & validation | AWS API Gateway |
-| **Lambda Functions** | URL validation & job status checking | Node.js 22.x |
-| **SQS Queues** | Asynchronous job processing | AWS SQS |
-| **ECS Fargate** | Screenshot processing with Puppeteer | Docker + Node.js |
-| **DynamoDB** | Job status and metadata storage | AWS DynamoDB |
-| **S3** | Screenshot image storage | AWS S3 |
-| **CloudWatch** | Monitoring, logging, and alerting | AWS CloudWatch |
+| Component            | Purpose                                       | Technology       |
+| -------------------- | --------------------------------------------- | ---------------- |
+| **API Gateway**      | RESTful endpoint with throttling & validation | AWS API Gateway  |
+| **Lambda Functions** | URL validation & job status checking          | Node.js 22.x     |
+| **SQS Queues**       | Asynchronous job processing                   | AWS SQS          |
+| **ECS Fargate**      | Screenshot processing with Puppeteer          | Docker + Node.js |
+| **DynamoDB**         | Job status and metadata storage               | AWS DynamoDB     |
+| **S3**               | Screenshot image storage                      | AWS S3           |
+| **CloudWatch**       | Monitoring, logging, and alerting             | AWS CloudWatch   |
 
 ### Available Environments
 
@@ -60,6 +60,7 @@ Backend Source Code is located here: [screenshot-service](https://github.com/ttu
    - Enable MFA for enhanced security
 
 2. **AWS Profile Configuration**
+
    ```bash
    # For environments without MFA
    aws configure --profile screenshot-service-prd
@@ -90,6 +91,7 @@ Before deploying Terraform resources, create the required backend infrastructure
 ```
 
 **Manual Setup** (if preferred):
+
 ```bash
 # Set environment variables
 export PROJECT="screenshot-service"
@@ -184,11 +186,11 @@ vim terraform/envs/stg/terraform.stg.tfvars
 
 ### Required Variables
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `project` | Project name | `screenshot-service` |
-| `env` | Environment name | `prd` or `stg` |
-| `region` | AWS region | `us-east-1` |
+| Variable              | Description         | Example                                                               |
+| --------------------- | ------------------- | --------------------------------------------------------------------- |
+| `project`             | Project name        | `screenshot-service`                                                  |
+| `env`                 | Environment name    | `prd` or `stg`                                                        |
+| `region`              | AWS region          | `us-east-1`                                                           |
 | `container_image_uri` | ECS container image | `123456789.dkr.ecr.us-east-1.amazonaws.com/screenshot-service:latest` |
 
 ## 🚢 Deployment
@@ -221,7 +223,6 @@ make apply e=prd s=general
 
 ## 🛠️ Service Management
 
-
 ### Editing an Existing Service
 
 1. **Make Changes** to the Terraform files
@@ -237,11 +238,13 @@ make apply e=prd s=general
 ### Removing a Service
 
 1. **Destroy Resources**
+
    ```bash
    make destroy e=prd s=service.name
    ```
 
 2. **Remove Symlinks**
+
    ```bash
    make unsymlink e=prd s=service.name
    ```
@@ -321,25 +324,37 @@ aws logs describe-log-groups --log-group-name-prefix "/ecs/screenshot-service" -
 ### Common Issues
 
 1. **State Lock Issues**
+
    ```bash
    # Force unlock if needed (use carefully)
    terraform force-unlock LOCK_ID -chdir=terraform/envs/prd/service.name/
    ```
 
 2. **Permission Errors**
+
    ```bash
    # Refresh MFA token
    ./scripts/create-aws-sts.sh screenshot-service-default screenshot-service-prd ACCOUNT_ID IAM_USER_NAME NEW_TOKEN
    ```
 
 3. **Resource Dependencies**
+
    ```bash
    # Check dependency order and deploy services in sequence
    make plan e=prd s=general  # Deploy foundation first
    make plan e=prd s=backend  # Deploy backend services last
    ```
 
+The correct order to build the app from scratch is:
+
+```
+general -> database -> deployment -> backend -> monitoring
+```
+
+And to destroy the app, follow the reverse order.
+
 4. **ECS Task Failures**
+
    ```bash
    # Check ECS service events
    aws ecs describe-services --cluster screenshot-service-prd-cluster --services screenshot-service-prd-service --profile screenshot-service-prd
@@ -366,6 +381,7 @@ make plan e=prd s=service.name | tee plan.out
 ### Development Workflow
 
 1. **Create Feature Branch**
+
    ```bash
    git checkout -b feature/new-feature
    ```
@@ -373,6 +389,7 @@ make plan e=prd s=service.name | tee plan.out
 2. **Make Changes** following the project structure
 
 3. **Test Changes**
+
    ```bash
    make plan e=stg s=affected.service
    ```
@@ -385,7 +402,6 @@ make plan e=prd s=service.name | tee plan.out
 - Use consistent resource tagging
 - Document all variables and outputs
 - Test in staging before production deployment
-
 
 ## 📞 Support
 
