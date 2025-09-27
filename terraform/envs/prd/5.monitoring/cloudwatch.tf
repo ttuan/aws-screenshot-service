@@ -1,24 +1,4 @@
-###################
-# KMS Key for SNS Encryption
-###################
-
-resource "aws_kms_key" "sns" {
-  description             = "KMS key for SNS topic encryption"
-  deletion_window_in_days = 7
-
-  tags = {
-    Name        = "${var.project}-${var.env}-sns-key"
-    Environment = var.env
-    Project     = var.project
-    Service     = "monitoring"
-    Terraform   = "true"
-  }
-}
-
-resource "aws_kms_alias" "sns" {
-  name          = "alias/${var.project}-${var.env}-sns"
-  target_key_id = aws_kms_key.sns.key_id
-}
+# KMS Key for SNS Encryption moved to general module
 
 ###################
 # SNS Topic for Alerts
@@ -27,8 +7,8 @@ resource "aws_kms_alias" "sns" {
 resource "aws_sns_topic" "alerts" {
   name = "${var.project}-${var.env}-alerts"
 
-  # Enable encryption
-  kms_master_key_id = aws_kms_key.sns.arn
+  # Enable encryption using KMS key from general module
+  kms_master_key_id = data.terraform_remote_state.general.outputs.sns_kms_key_arn
 
   tags = {
     Name        = "${var.project}-${var.env}-alerts"

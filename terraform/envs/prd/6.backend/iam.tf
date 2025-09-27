@@ -206,9 +206,9 @@ resource "aws_iam_policy" "ecs_kms_policy" {
           "kms:DescribeKey"
         ]
         Resource = compact([
-          aws_kms_key.sqs.arn,
+          data.terraform_remote_state.general.outputs.sqs_kms_key_arn,
           data.terraform_remote_state.general.outputs.s3_kms_key_arn,
-          try(data.terraform_remote_state.monitoring.outputs.sns_kms_key_arn, null)
+          data.terraform_remote_state.general.outputs.sns_kms_key_arn
         ])
       }
     ]

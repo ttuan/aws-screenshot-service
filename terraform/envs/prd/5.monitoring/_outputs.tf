@@ -12,17 +12,6 @@ output "sns_alerts_topic_name" {
   value       = aws_sns_topic.alerts.name
 }
 
-# KMS Key outputs
-output "sns_kms_key_arn" {
-  description = "ARN of the SNS KMS key"
-  value       = aws_kms_key.sns.arn
-}
-
-output "sns_kms_key_id" {
-  description = "ID of the SNS KMS key"
-  value       = aws_kms_key.sns.key_id
-}
-
 ###################
 # CloudWatch Dashboard Output
 ###################
