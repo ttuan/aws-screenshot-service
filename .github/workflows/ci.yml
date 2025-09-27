@@ -35,6 +35,14 @@ jobs:
         echo "Checking Terraform formatting..."
         terraform fmt -check -recursive terraform/
 
+    - name: Create variable symlinks
+      run: |
+        echo "Creating variable symlinks for Terraform..."
+        for env in prd; do
+          echo "Creating symlinks for $env environment..."
+          make symlink_all e=$env
+        done
+
     - name: Validate Terraform configurations
       run: |
         echo "Validating Terraform configurations..."
