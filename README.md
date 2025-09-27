@@ -117,7 +117,7 @@ aws-screenshot-service/
 ├── terraform/
 │   ├── envs/
 │   │   ├── prd/                    # Production environment
-│   │   │   ├── 1.general/          # VPC, IAM, S3 foundation
+│   │   │   ├── 1.general/          # VPC, IAM, S3, KMS foundation
 │   │   │   ├── 2.admin/            # Administrative resources
 │   │   │   ├── 3.database/         # DynamoDB tables
 │   │   │   ├── 4.deployment/       # Lambda, API Gateway
@@ -139,9 +139,27 @@ aws-screenshot-service/
 
 ### Service Deployment Order
 
+#### 🔨 Backend Setup - IMPORTANT
+
+Before deploying infrastructure, you need to:
+
+1. Clone the backend source code
+
+```bash
+git clone git@github.com:ttuan/screenshot-service.git
+```
+
+2. Run script to build and push backend image to your ECR
+
+```bash
+./scripts/build-and-push-ecr.sh
+```
+
+#### AWS Resource Deployment Order
+
 Services must be deployed in the following order due to dependencies:
 
-1. **general** - VPC, IAM roles, S3 buckets
+1. **general** - VPC, IAM roles, S3 buckets, KMS
 2. **admin** - Administrative resources
 3. **database** - DynamoDB tables
 4. **backend** - ECS cluster, SQS queues, auto-scaling
