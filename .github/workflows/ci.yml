@@ -50,10 +50,15 @@ jobs:
           echo "Validating $env environment..."
           for service in $(ls terraform/envs/$env/ | grep -E '^[0-9]'); do
             echo "  Validating service: $service"
-            cd terraform/envs/$env/$service
-            terraform init -backend=false
-            terraform validate
-            cd ../../../../..
+            if [ -d "terraform/envs/$env/$service" ]; then
+              cd terraform/envs/$env/$service
+              terraform init -backend=false
+              terraform validate
+              cd "$GITHUB_WORKSPACE"
+            else
+              echo "  ❌ Directory not found: terraform/envs/$env/$service"
+              exit 1
+            fi
           done
         done
 
