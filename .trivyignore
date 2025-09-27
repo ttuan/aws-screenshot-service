@@ -1,0 +1,20 @@
+# Trivy ignore file for security scanning
+# Add CVEs that are acceptable or false positives here
+
+# Example: Ignore specific CVE that doesn't affect our use case
+# CVE-2023-12345
+
+# Ignore low severity issues in development dependencies
+# These are test-only dependencies and don't affect production
+**/node_modules/jest/**
+**/node_modules/@types/**
+**/node_modules/aws-sdk-client-mock/**
+
+# Ignore issues in Terraform state files and lock files
+**/.terraform/**
+**/.terraform.lock.hcl
+**/terraform.tfstate*
+
+# Ignore issues in build artifacts
+**/*.zip
+**/node_modules/**/.cache/**
