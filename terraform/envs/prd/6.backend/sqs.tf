@@ -1,5 +1,3 @@
-# KMS Key for SQS Encryption moved to general module
-
 ###################
 # Dead Letter Queue (DLQ) for Failed Messages
 ###################
